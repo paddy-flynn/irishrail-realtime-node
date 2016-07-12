@@ -1,0 +1,23 @@
+{
+  "name": "irishrail-realtime-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Flynnp25/irishrail-realtime-node.git"
+  },
+  "author": "Patrick Flynn <pflynn210392@gmail.com> (http://patrick-flynn.org)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Flynnp25/irishrail-realtime-node/issues"
+  },
+  "homepage": "https://github.com/Flynnp25/irishrail-realtime-node#readme",
+  "dependencies": {
+    "request": "2.73.0",
+    "xml2js":"0.4.17"
+  }
+}
