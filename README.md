@@ -18,7 +18,7 @@ var irishRailApi = require('irishrail-realtime-node');
 ** The response is returned in the callback **  
 The call back should be a function that takes one parameter. It should be passed into all method calls.  
 If the status is 0 and error has occurred.  
-If the status is 1 the api has been sucessful.  
+If the status is 1 the api has been successful.  
 The returnedResponse looks like this. 
 ```javascript
 var returnedResponse = {status: 0, response: someResponseObject};
