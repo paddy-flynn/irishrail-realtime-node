@@ -4,7 +4,7 @@ var parseString = require('xml2js').parseString;
 
 var responseObject = {status: 0, response: ''};
 
-exports.getAllStations = function (params, isJSONResponse, callback) {
+exports.getAllStations = function (callback, isJSONResponse = false,params = {}) {
     try {
         if (typeof(isJSONResponse) !== "boolean") {
             responseObject.response = 'The isJSONResponse parameter must be a boolean';
@@ -51,7 +51,7 @@ exports.getAllStations = function (params, isJSONResponse, callback) {
     }
 };
 
-exports.getCurrentTrains = function (params, isJSONResponse, callback) {
+exports.getCurrentTrains = function (callback, isJSONResponse = false, params = {}) {
     try {
         if (typeof(isJSONResponse) !== "boolean") {
             responseObject.response = 'The isJSONResponse parameter must be a boolean';
@@ -98,7 +98,7 @@ exports.getCurrentTrains = function (params, isJSONResponse, callback) {
 };
 
 
-exports.getStationData = function (params, isJSONResponse, callback) {
+exports.getStationData = function (callback, isJSONResponse = false,params = {}) {
     try {
         if (typeof(isJSONResponse) !== "boolean") {
             responseObject.response = 'The isJSONResponse parameter must be a boolean';
@@ -158,7 +158,7 @@ exports.getStationData = function (params, isJSONResponse, callback) {
     }
 };
 
-exports.getStationsFilter = function (params, isJSONResponse, callback) {
+exports.getStationsFilter = function (callback, isJSONResponse = false,params = {}) {
     try {
         if (typeof(isJSONResponse) !== "boolean") {
             responseObject.response = 'The isJSONResponse parameter must be a boolean';
@@ -207,7 +207,7 @@ exports.getStationsFilter = function (params, isJSONResponse, callback) {
     }
 };
 
-exports.getTrainMovements = function (params, isJSONResponse, callback) {
+exports.getTrainMovements = function (callback, isJSONResponse = false,params = {}) {
     try {
         if (typeof(isJSONResponse) !== "boolean") {
             responseObject.response = 'The isJSONResponse parameter must be a boolean';
@@ -270,7 +270,7 @@ exports.getTrainMovements = function (params, isJSONResponse, callback) {
 }
 ;
 
-exports.getHaconTrains = function (isJSONResponse, callback) {
+exports.getHaconTrains = function (callback, isJSONResponse = false) {
     try {
         if (typeof(isJSONResponse) !== "boolean") {
             responseObject.response = 'The isJSONResponse parameter must be a boolean';
