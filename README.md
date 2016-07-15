@@ -1,9 +1,9 @@
 # irishrail-realtime-node
 This is a Node.js Module for the IrishRail Real time service.
 
-This Module is based off the following website: 
-1. http://api.irishrail.ie/realtime/
-2. http://api.irishrail.ie/realtime/realtime.asmx
+This Module is based off the following website:  
+1. http://api.irishrail.ie/realtime/  
+2. http://api.irishrail.ie/realtime/realtime.asmx  
 
 ## Installation ##
 
