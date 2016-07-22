@@ -1,5 +1,7 @@
 # irishrail-realtime-node
-This is a Node.js Module for the IrishRail Real time service.
+This is a Node.js Module for the IrishRail Real time service.  
+
+This Module works with EMCAScript 6.
 
 This Module is based off the following websites:  
 1. http://api.irishrail.ie/realtime/  
