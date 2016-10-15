@@ -121,7 +121,7 @@ exports.getStationData = function (callback, isJSONResponse = false,params = {})
         }
 
         if (params.hasOwnProperty('NumMins')) {
-            url = url + '_withNumMins';
+            url = (params.hasOwnProperty('StationDesc')) ? url + '_withNumMins' : url + '_WithNumMins';
         }
 
         request({
