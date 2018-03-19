@@ -22,7 +22,9 @@ exports.getAllStations = function (isJSONResponse = false,params = {}) {
         }, function (error, response, body) {
           if (error) {
             throw error;
-          } else {
+          } else if (response.statusCode != 200) {
+            throw body;
+        } else {
             if (isJSONResponse) {
               parseString(body, function (err, result) {
                 if (err) {
@@ -63,6 +65,8 @@ exports.getCurrentTrains = function (isJSONResponse = false, params = {}) {
         }, function (error, response, body) {
             if (error) {
                 throw error;
+            } else if (response.statusCode != 200) {
+                throw body;
             } else {
                 if (isJSONResponse) {
                     parseString(body, function (err, result) {
@@ -116,6 +120,9 @@ exports.getStationData = function (isJSONResponse = false,params = {}) {
         }, function (error, response, body) {
             if (error) {
                 throw error;
+            }
+            else if (response.statusCode != 200) {
+                throw body;
             } else {
                 if (isJSONResponse) {
                     parseString(body, function (err, result) {
@@ -137,18 +144,18 @@ exports.getStationData = function (isJSONResponse = false,params = {}) {
     }
 };
 
-exports.getStationsFilter = function (callback, isJSONResponse = false,params = {}) {
+exports.getStationsFilter = function (isJSONResponse = false,params = {}) {
     try {
+        return new Promise((resolve, reject) => {
+
         if (typeof(isJSONResponse) !== "boolean") {
-            responseObject.response = 'The isJSONResponse parameter must be a boolean';
-            return callback(responseObject);
+            throw 'The isJSONResponse parameter must be a boolean';        
         }
 
         var url = 'http://api.irishrail.ie/realtime/realtime.asmx/getStationsFilterXML';
 
         if (!params.hasOwnProperty('StationText')) {
-            responseObject.response = 'Must have \'StationText\' parameter.';
-            return callback(responseObject);
+            throw 'Must have \'StationText\' parameter.';            
         }
 
         request({
@@ -157,32 +164,28 @@ exports.getStationsFilter = function (callback, isJSONResponse = false,params = 
             form: params
         }, function (error, response, body) {
             if (error) {
-                responseObject.response = error;
+                throw error;
             } else if (response.statusCode != 200) {
-                responseObject.response = body;
-                return callback(responseObject);
+                throw body;
             }
             else {
                 if (isJSONResponse) {
                     parseString(body, function (err, result) {
                         if (err) {
-                            responseObject.response = err;
+                            throw err;
                         }
                         else {
-                            responseObject.status = 1;
-                            responseObject.response = result;
+                            return resolve(result);
                         }
                     });
                 } else {
-                    responseObject.status = 1;
-                    responseObject.response = body;
+                    return resolve(body);
                 }
-            }
-            return callback(responseObject);
+            }            
         });
+    })
     } catch (err) {
-        responseObject.response = err;
-        return callback(responseObject);
+        throw err;
     }
 };
 
