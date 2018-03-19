@@ -2,54 +2,46 @@
 var request = require('request');
 var parseString = require('xml2js').parseString;
 
-var responseObject = {status: 0, response: ''};
-
-exports.getAllStations = function (callback, isJSONResponse = false,params = {}) {
+exports.getAllStations = function (isJSONResponse = false,params = {}) {
     try {
+      return new Promise((resolve, reject) => {
+  
         if (typeof(isJSONResponse) !== "boolean") {
-            responseObject.response = 'The isJSONResponse parameter must be a boolean';
-            return callback(responseObject);
+          throw 'The isJSONResponse parameter must be a boolean';
         }
         var url = 'http://api.irishrail.ie/realtime/realtime.asmx/getAllStationsXML';
-
+  
         if (params.hasOwnProperty('StationType')) {
-            url = url + '_WithStationType';
+          url = url + '_WithStationType';
         }
-
+  
         request({
-            url: url,
-            method: 'POST',
-            form: params
+          url: url,
+          method: 'POST',
+          form: params
         }, function (error, response, body) {
-            if (error) {
-                responseObject.response = error;
-            } else if (response.statusCode != 200) {
-                responseObject.response = body;
-                return callback(responseObject);
-            } else {
-                if (isJSONResponse) {
-                    parseString(body, function (err, result) {
-                        if (err) {
-                            responseObject.response = err;
-                        }
-                        else {
-                            responseObject.status = 1;
-                            responseObject.response = result;
-                        }
-                    });
-                } else {
-                    responseObject.status = 1;
-                    responseObject.response = body;
+          if (error) {
+            throw error;
+          } else {
+            if (isJSONResponse) {
+              parseString(body, function (err, result) {
+                if (err) {
+                  throw err;
                 }
+                else {
+                  return resolve(result);
+                }
+              });
+            } else {
+              return resolve(body);
             }
-            return callback(responseObject);
+          }
         });
-
+      })
     } catch (err) {
-        responseObject.response = err;
-        return callback(responseObject);
+      throw err;
     }
-};
+  };
 
 exports.getCurrentTrains = function (callback, isJSONResponse = false, params = {}) {
     try {
