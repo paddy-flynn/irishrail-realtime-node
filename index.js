@@ -189,29 +189,27 @@ exports.getStationsFilter = function (isJSONResponse = false,params = {}) {
     }
 };
 
-exports.getTrainMovements = function (callback, isJSONResponse = false,params = {}) {
+exports.getTrainMovements = function (isJSONResponse = false,params = {}) {
     try {
+        return new Promise((resolve, reject) => {
+
         if (typeof(isJSONResponse) !== "boolean") {
-            responseObject.response = 'The isJSONResponse parameter must be a boolean';
-            return callback(responseObject);
+            throw 'The isJSONResponse parameter must be a boolean';        
         }
 
         var url = 'http://api.irishrail.ie/realtime/realtime.asmx/getTrainMovementsXML';
 
         if (!params.hasOwnProperty('TrainId')) {
-            responseObject.response = 'Must have \'TrainId\' parameter.';
-            return callback(responseObject);
+            throw 'Must have \'TrainId\' parameter.';            
         }
 
         if (!params.hasOwnProperty('TrainDate')) {
-            responseObject.response = 'Must have \'TrainDate\' parameter.';
-            return callback(responseObject);
+            throw 'Must have \'TrainDate\' parameter.';            
         }
 
         var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
         if (!params.TrainDate.match(pattern)) {
-            responseObject.response = 'Your date parameter must be in the format \'dd/mm/yyyy\'.';
-            return callback(responseObject);
+            throw 'Your date parameter must be in the format \'dd/mm/yyyy\'.';        
         }
 
         request({
@@ -220,43 +218,38 @@ exports.getTrainMovements = function (callback, isJSONResponse = false,params = 
             form: params
         }, function (error, response, body) {
             if (error) {
-                responseObject.response = error;
+                throw error;
             } else if (response.statusCode != 200) {
-                responseObject.response = body;
-                return callback(responseObject);
+                throw body;                
             }
             else {
                 if (isJSONResponse) {
                     parseString(body, function (err, result) {
                         if (err) {
-                            responseObject.response = err;
+                            throw err;
                         }
                         else {
-                            responseObject.status = 1;
-                            responseObject.response = result;
+                            return resolve(result);
                         }
                     });
-                } else {
-                    responseObject.status = 1;
-                    responseObject.response = body;
+                } else {                    
+                    return resolve(body);
                 }
-            }
-            return callback(responseObject);
+            }            
         });
+    })
     }
-    catch
-        (err) {
-        responseObject.response = err;
-        return callback(responseObject);
+    catch(err) {
+        throw err;
     }
-}
-;
+};
 
-exports.getHaconTrains = function (callback, isJSONResponse = false) {
+exports.getHaconTrains = function (isJSONResponse = false) {
     try {
+        return new Promise((resolve, reject) => {
+
         if (typeof(isJSONResponse) !== "boolean") {
-            responseObject.response = 'The isJSONResponse parameter must be a boolean';
-            return callback(responseObject);
+            throw 'The isJSONResponse parameter must be a boolean';            
         }
         var url = 'http://api.irishrail.ie/realtime/realtime.asmx/getHaconTrainsXML';
 
@@ -266,27 +259,27 @@ exports.getHaconTrains = function (callback, isJSONResponse = false) {
             form: {}
         }, function (error, response, body) {
             if (error) {
-                responseObject.response = error;
+                throw error;
+            }
+            else if (response.statusCode != 200) {
+                throw body;                
             } else {
                 if (isJSONResponse) {
                     parseString(body, function (err, result) {
                         if (err) {
-                            responseObject.response = err;
+                            throw err;
                         }
                         else {
-                            responseObject.status = 1;
-                            responseObject.response = result;
+                            return resolve(result);
                         }
                     });
                 } else {
-                    responseObject.status = 1;
-                    responseObject.response = body;
+                    return resolve(body);
                 }
-            }
-            return callback(responseObject);
+            }            
         });
+    })
     } catch (err) {
-        responseObject.response = err;
-        return callback(responseObject);
+        throw err;    
     }
 };
