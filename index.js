@@ -85,26 +85,24 @@ exports.getCurrentTrains = function (isJSONResponse = false, params = {}) {
 };
 
 
-exports.getStationData = function (callback, isJSONResponse = false,params = {}) {
+exports.getStationData = function (isJSONResponse = false,params = {}) {
     try {
+        return new Promise((resolve, reject) => {
         if (typeof(isJSONResponse) !== "boolean") {
-            responseObject.response = 'The isJSONResponse parameter must be a boolean';
-            return callback(responseObject);
+            throw 'The isJSONResponse parameter must be a boolean';        
         }
 
         var url = 'http://api.irishrail.ie/realtime/realtime.asmx/getStationDataBy';
 
         if (params.hasOwnProperty('StationDesc') && params.hasOwnProperty('StationCode')) {
-            responseObject.response = 'Cannot have both \'StationDesc\' and \'StationCode\' parameters ';
-            return callback(responseObject);
+            throw 'Cannot have both \'StationDesc\' and \'StationCode\' parameters ';            
         }
         else if (params.hasOwnProperty('StationDesc')) {
             url = url + 'NameXML';
         } else if (params.hasOwnProperty('StationCode')) {
             url = url + 'CodeXML';
         } else {
-            responseObject.response = 'Must have either \'StationDesc\' or \'StationCode\' parameters ';
-            return callback(responseObject);
+             throw 'Must have either \'StationDesc\' or \'StationCode\' parameters ';            
         }
 
         if (params.hasOwnProperty('NumMins')) {
@@ -117,31 +115,25 @@ exports.getStationData = function (callback, isJSONResponse = false,params = {})
             form: params
         }, function (error, response, body) {
             if (error) {
-                responseObject.response = error;
-            } else if (response.statusCode != 200) {
-                responseObject.response = body;
-                return callback(responseObject);
+                throw error;
             } else {
                 if (isJSONResponse) {
                     parseString(body, function (err, result) {
                         if (err) {
-                            responseObject.response = err;
+                            throw err;
                         }
                         else {
-                            responseObject.status = 1;
-                            responseObject.response = result;
+                            return resolve(result);
                         }
                     });
                 } else {
-                    responseObject.status = 1;
-                    responseObject.response = body;
+                    return resolve(body);
                 }
-            }
-            return callback(responseObject);
+            }            
         });
+    })
     } catch (err) {
-        responseObject.response = err;
-        return callback(responseObject);
+        throw err;
     }
 };
 
